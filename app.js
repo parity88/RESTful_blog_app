@@ -18,19 +18,14 @@ var blogSchema = new mongoose.Schema({
 
 var Blog = mongoose.model("Blog", blogSchema);
 
-// Blog.create({
-//     title: "Test Blog",
-//     image: "https://cdn.pixabay.com/photo/2018/03/31/06/31/dog-3277416_960_720.jpg",
-//     body: "Hello, This is a blog post about dog."
-// });
 
-
-// RESTful Routes
+// RESTful routes
 
 app.get("/",function(req, res) {
     res.redirect("index");    
 });
 
+// Index route
 app.get("/blogs",function(req,res){
     Blog.find({}, function(err,blogs){
         if(err){
@@ -40,6 +35,22 @@ app.get("/blogs",function(req,res){
         }
     });
     
+});
+
+// New route
+app.get("/blogs/new",function(req, res) {
+    res.render("new");
+});
+
+//Create route
+app.post("/blogs", function(req,res){
+   Blog.create(req.body.blog,function(err,newBlog){
+       if(err){
+           res.render("new");
+       } else {
+           res.redirect("/blogs");
+       }
+   }); 
 });
 
 app.listen(process.env.PORT,process.env.IP,function(){
